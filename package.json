@@ -1,5 +1,5 @@
 {
-  "name": "github-releases-proxy",
+  "name": "github-releases-server",
   "scripts": {
     "start": "vercel dev",
     "deploy": "vercel",
