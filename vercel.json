@@ -10,6 +10,11 @@
       "source": "/",
       "destination": "/api",
       "permanent": true
+    },
+    {
+      "source": "/release/(.*)",
+      "destination": "/api/release/$1",
+      "permanent": true
     }
   ]
 }

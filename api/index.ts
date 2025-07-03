@@ -21,7 +21,6 @@ app.get('/release/:owner/:repo/:tag/:asset', async (c) => {
   const tag = c.req.param('tag');
   const asset = c.req.param('asset');
 
-  // Validate owner is in allowed list
   if (!isOwnerAllowed(owner)) {
     return c.json(
       {
