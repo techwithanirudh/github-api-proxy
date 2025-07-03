@@ -1,0 +1,17 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint: 
+      run: pnpm ultracite lint {staged_files}
+      glob: "*.{js,ts,jsx,tsx}"
+    format:
+      run: pnpm ultracite format {staged_files}
+      glob: "*.{js,ts,jsx,tsx}"
+    types:
+      run: pnpm types:check
+      glob: "*.{js,ts,jsx,tsx}"
+
+commit-msg:
+  commands:
+    'lint commit message':
+      run: pnpm commitlint --edit {1}

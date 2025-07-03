@@ -1,0 +1,26 @@
+{
+  "name": "coolify-tweaks-api",
+  "scripts": {
+    "start": "vercel dev",
+    "deploy": "vercel",
+    "format": "pnpm ultracite format",
+    "types:check": "tsc --noEmit --skipLibCheck"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "hono": "^4.6.20"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.0.6",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/format": "^19.8.1",
+    "@commitlint/types": "^19.8.1",
+    "conventional-changelog-atom": "^5.0.0",
+    "lefthook": "^1.11.15",
+    "ultracite": "5.0.31",
+    "vercel": "^32.4.1"
+  }
+}
