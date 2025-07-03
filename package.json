@@ -10,7 +10,8 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "hono": "^4.6.20"
+    "hono": "^4.6.20",
+    "ky": "^1.8.1"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
