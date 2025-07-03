@@ -1,5 +1,5 @@
 {
-  "name": "coolify-tweaks-api",
+  "name": "github-releases-proxy",
   "scripts": {
     "start": "vercel dev",
     "deploy": "vercel",
@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "hono": "^4.6.20",
-    "ky": "^1.8.1"
+    "ky": "^1.8.1",
+    "mime": "^4.0.7"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.6",

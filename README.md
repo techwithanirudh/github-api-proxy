@@ -1,4 +1,6 @@
-# coolify-tweaks-api
+# github-releases-proxy
+
+> Check config.ts for settings
 
 ```
 pnpm install

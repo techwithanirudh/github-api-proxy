@@ -3,6 +3,7 @@ import { handle } from 'hono/vercel';
 import { cors } from 'hono/cors';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import ky from 'ky';
+import mime from 'mime';
 import { repo, headers as stripHeaders } from './config';
 
 export const config = { runtime: 'edge' };
@@ -15,10 +16,7 @@ app.get('/release/:tag/:asset', async (c) => {
   const asset = c.req.param('asset');
   const url = `https://github.com/${repo}/releases/download/${encodeURIComponent(tag)}/${encodeURIComponent(asset)}`;
 
-  const res = await ky.get(url, {
-    throwHttpErrors: false,
-    timeout: false,
-  });
+  const res = await ky.get(url, { throwHttpErrors: false, timeout: false });
 
   if (!res.ok) {
     return c.json(
@@ -35,6 +33,9 @@ app.get('/release/:tag/:asset', async (c) => {
       }
     }
   }
+
+  const detected = mime.getType(asset);
+  headersObj.set('Content-Type', detected || 'application/octet-stream');
   headersObj.set('X-Proxy-Host', 'github.com');
 
   return new Response(res.body, { status: res.status, headers: headersObj });
