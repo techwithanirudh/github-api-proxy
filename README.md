@@ -29,9 +29,19 @@ export const allowedOwners = [
 GET /api/release/:owner/:repo/:tag/:asset
 ```
 
-**Example:**
+**Parameters:**
+- `owner`: GitHub repository owner (must be in allowedOwners list)
+- `repo`: Repository name
+- `tag`: Release tag (or "latest" for the most recent release)
+- `asset`: Asset filename
+
+**Examples:**
 ```
+# Specific release tag
 GET /api/release/techwithanirudh/my-app/v1.0.0/app.zip
+
+# Latest release (automatically resolves to actual tag)
+GET /api/release/techwithanirudh/my-app/latest/app.zip
 ```
 
 ### Health Check
@@ -60,8 +70,11 @@ pnpm run deploy
 ## Usage Examples
 
 ```bash
-# Download a release asset
+# Download a specific release asset
 curl https://your-domain.vercel.app/api/release/techwithanirudh/my-app/v1.0.0/app.zip
+
+# Download from the latest release
+curl https://your-domain.vercel.app/api/release/techwithanirudh/my-app/latest/app.zip
 
 # Check allowed owners
 curl https://your-domain.vercel.app/api/health

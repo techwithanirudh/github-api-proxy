@@ -31,7 +31,7 @@ app.get('/release/:owner/:repo/:tag/:asset', async (c) => {
     );
   }
 
-  const url = `https://github.com/${owner}/${repo}/releases/download/${encodeURIComponent(tag)}/${encodeURIComponent(asset)}`;
+  const url = `https://github.com/${owner}/${repo}/releases/${encodeURIComponent(tag)}/download/${encodeURIComponent(asset)}`;
 
   try {
     const res = await ky.get(url, { throwHttpErrors: false, timeout: false });
@@ -40,7 +40,9 @@ app.get('/release/:owner/:repo/:tag/:asset', async (c) => {
       return c.json(
         {
           error: `GitHub returned ${res.status}: ${res.statusText}`,
-          url: `${owner}/${repo}/releases/tag/${tag}`
+          url: `${owner}/${repo}/releases/tag/${tag}`,
+          requestedTag: tag,
+          resolvedTag: tag
         },
         res.status as ContentfulStatusCode
       );
