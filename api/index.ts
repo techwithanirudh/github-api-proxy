@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
+import { handle } from 'hono/vercel';
 import ky from 'ky';
 import mime from 'mime';
 import { processContent } from './lib/utils';
@@ -76,4 +77,4 @@ app.get('/', (c) => {
   });
 });
 
-export default app;
+export default handle(app);

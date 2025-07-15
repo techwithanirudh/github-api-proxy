@@ -4,6 +4,9 @@ import ky from 'ky';
 import { cssVarsToCss } from './css-transformer';
 import { type RegistryItem, registryItemSchema } from './validators';
 
+const THEME_START = '/* ==UI-THEME-VARS:START== */';
+const THEME_END = '/* ==UI-THEME-VARS:END== */';
+
 export async function getThemeCss(themeId: string): Promise<string | null> {
   const url = `https://tweakcn.com/r/themes/${themeId}`;
   const theme = await ky
@@ -32,8 +35,16 @@ export async function processContent({
 
   if (themeId) {
     const css = await getThemeCss(themeId);
+    const wrappedCss = `${THEME_START}\n${css}\n${THEME_END}`;
 
-    return css;
+    const themeRegex = new RegExp(
+      `${THEME_START.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&')}[\\s\\S]*?${THEME_END.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&')}`,
+      'm'
+    );
+
+    if (themeRegex.test(content)) {
+      return content.replace(themeRegex, wrappedCss);
+    }
   }
 
   return content;

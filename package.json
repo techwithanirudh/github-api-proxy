@@ -3,7 +3,6 @@
   "type": "module",
   "scripts": {
     "start": "vercel dev",
-    "build": "vercel build",
     "deploy": "vercel deploy",
     "format": "pnpm ultracite format",
     "types:check": "tsc --noEmit --skipLibCheck"

@@ -5,25 +5,16 @@ const LEADING_DASHES_REGEX = /^--/;
 export function cssVarsToCss(cssVars: Record<string, Record<string, string>>) {
   const root = postcss.root();
 
-  const baseLayer = postcss.atRule({
-    name: 'layer',
-    params: 'base',
-    nodes: [],
-    raws: {
-      semicolon: true,
-      before: '\n',
-      between: ' ',
-    },
-  });
-
-  root.append(baseLayer);
-
   for (const [themeKey, vars] of Object.entries(cssVars)) {
     const selector = themeKey === 'light' ? ':root' : `.${themeKey}`;
 
     const ruleNode = postcss.rule({
       selector,
-      raws: { between: ' ', before: '\n  ' },
+      raws: {
+        before: '\n',
+        between: ' ',
+        after: '\n',
+      },
     });
 
     for (const [key, value] of Object.entries(vars)) {
@@ -32,13 +23,18 @@ export function cssVarsToCss(cssVars: Record<string, Record<string, string>>) {
         postcss.decl({
           prop,
           value,
-          raws: { semicolon: true },
+          raws: {
+            before: '\n  ',
+            between: ': ',
+            after: '',
+            semicolon: true,
+          },
         })
       );
     }
 
-    baseLayer.append(ruleNode);
+    root.append(ruleNode);
   }
 
-  return root.toString();
+  return root.toResult().css;
 }
