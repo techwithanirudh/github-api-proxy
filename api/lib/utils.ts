@@ -31,10 +31,11 @@ export async function processContent({
   content: string;
   c: Context;
 }): Promise<string | null | undefined> {
-  const themeId = c.req.query('theme');
+  const theme = c.req.query('theme');
+  const asset = c.req.query('asset') || 'main.user.css';
 
-  if (themeId) {
-    const css = await getThemeCss(themeId);
+  if (theme && asset === 'main.user.css') {
+    const css = await getThemeCss(theme);
     const wrappedCss = `${THEME_START}\n${css}\n${THEME_END}`;
 
     const themeRegex = new RegExp(

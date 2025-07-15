@@ -15,7 +15,7 @@ app.get('/release/:tag', async (c) => {
   const owner = 'techwithanirudh';
   const repo = 'coolify-tweaks';
   const tag = c.req.param('tag');
-  const asset = 'main.user.css';
+  const asset = c.req.query('asset') || 'main.user.css';
 
   const url = `https://github.com/${owner}/${repo}/releases/${encodeURIComponent(tag)}/download/${encodeURIComponent(asset)}`;
 

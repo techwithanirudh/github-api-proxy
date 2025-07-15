@@ -1,47 +1,37 @@
-# GitHub Releases Server
+# Coolify Tweaks API
 
-A configurable proxy server for serving GitHub release assets from approved repository owners. This server allows you to control which GitHub organizations/users can have their release assets served through your proxy.
+A server for delivering GitHub release assets for Coolify Tweaks. It bypasses GitHub CDN restrictions and applies custom TweakCN styles.
 
 ## Features
 
-- 🔒 **Owner Allowlist**: Only serve releases from configured GitHub owners
 - 🚀 **Fast Edge Runtime**: Runs on Vercel's edge runtime for global performance
 - 🔧 **Easy Configuration**: Simple config file to manage allowed owners
 - 📦 **Asset Proxying**: Proper MIME type detection and header handling
 - 🩺 **Health Checks**: Built-in health and info endpoints
 
-## Configuration
-
-Edit `api/config.ts` to configure allowed owners:
-
-```typescript
-export const allowedOwners = [
-  'techwithanirudh',
-  'another-owner',
-  'some-organization',
-];
-```
-
 ## API Endpoints
 
 ### Get Release Asset
 ```
-GET /api/release/:owner/:repo/:tag/:asset
+GET /api/release/:tag/?asset=xyz.css&theme=abc.css
 ```
 
 **Parameters:**
-- `owner`: GitHub repository owner (must be in allowedOwners list)
-- `repo`: Repository name
 - `tag`: Release tag (or "latest" for the most recent release)
 - `asset`: Asset filename
+- `theme`: TweakCN Theme
 
 **Examples:**
 ```
-# Specific release tag
-GET /api/release/techwithanirudh/my-app/v1.0.0/app.zip
+# Download a specific release asset
+curl https://localhost:3000/api/release/latest?asset=coolify-tweaks.zip
 
-# Latest release (automatically resolves to actual tag)
-GET /api/release/techwithanirudh/my-app/latest/app.zip
+# Theming
+curl https://localhost:3000/api/release/latest?theme=claude.json
+curl https://localhost:3000/api/release/latest?theme=claude.json&asset=main.user.css
+
+# Without Theming
+curl https://localhost:3000/api/release/latest?asset=main.user.css
 ```
 
 ### Health Check
@@ -66,22 +56,3 @@ bun run dev
 # Deploy to Vercel
 bun run deploy
 ```
-
-## Usage Examples
-
-```bash
-# Download a specific release asset
-curl https://your-domain.vercel.app/api/release/techwithanirudh/my-app/v1.0.0/app.zip
-
-# Download from the latest release
-curl https://your-domain.vercel.app/api/release/techwithanirudh/my-app/latest/app.zip
-
-# Check allowed owners
-curl https://your-domain.vercel.app/api/health
-```
-
-## Security
-
-- Only repositories from owners listed in `allowedOwners` can be accessed
-- Requests for unauthorized owners return 403 Forbidden
-- All GitHub API errors are properly handled and returned
