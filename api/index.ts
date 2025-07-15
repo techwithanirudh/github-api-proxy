@@ -6,6 +6,8 @@ import ky from 'ky';
 import mime from 'mime';
 import { processContent } from './lib/utils';
 
+export const config = { runtime: 'nodejs' };
+
 const app = new Hono().basePath('/api');
 app.use('*', cors());
 
