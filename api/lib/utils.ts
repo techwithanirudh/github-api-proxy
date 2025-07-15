@@ -24,6 +24,15 @@ export async function getThemeCss(themeId: string): Promise<string | null> {
   return themeCss;
 }
 
+export function changeMetadata(
+  content: string,
+  field: string,
+  value: string
+): string {
+  const metaRegex = new RegExp(`^(@${field}\\s+).+$`, 'm');
+  return content.replace(metaRegex, `$1${value}`);
+}
+
 export async function processContent({
   content,
   c,
@@ -34,6 +43,8 @@ export async function processContent({
   const theme = c.req.query('theme');
   const asset = c.req.query('asset') || 'main.user.css';
 
+  let result: string | null | undefined = content;
+
   if (theme && asset === 'main.user.css') {
     const css = await getThemeCss(theme);
     const wrappedCss = `${THEME_START}\n${css}\n${THEME_END}`;
@@ -43,10 +54,12 @@ export async function processContent({
       'm'
     );
 
-    if (themeRegex.test(content)) {
-      return content.replace(themeRegex, wrappedCss);
+    result = changeMetadata(result, 'updateURL', c.req.url);
+
+    if (themeRegex.test(result)) {
+      result = result.replace(themeRegex, wrappedCss);
     }
   }
 
-  return content;
+  return result;
 }
