@@ -17,7 +17,7 @@ app.get('/release/:tag', async (c) => {
   const tag = c.req.param('tag');
   const asset = 'main.user.css';
 
-  const url = `https://github.com/${owner}/${repo}/releases/download/${encodeURIComponent(tag)}/${encodeURIComponent(asset)}`;
+  const url = `https://github.com/${owner}/${repo}/releases/${encodeURIComponent(tag)}/download/${encodeURIComponent(asset)}`;
 
   try {
     const res = await ky.get(url, { throwHttpErrors: false, timeout: false });

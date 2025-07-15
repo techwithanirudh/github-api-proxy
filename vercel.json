@@ -7,6 +7,11 @@
   ],
   "redirects": [
     {
+      "source": "/api/release/techwithanirudh/coolify-tweaks/latest/(.*)",
+      "destination": "/api/release/latest/$1",
+      "permanent": true
+    },
+    {
       "source": "/",
       "destination": "/api",
       "permanent": true
