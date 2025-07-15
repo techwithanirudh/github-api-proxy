@@ -11,9 +11,7 @@ export function cssVarsToCss(cssVars: Record<string, Record<string, string>>) {
     const ruleNode = postcss.rule({
       selector,
       raws: {
-        before: '\n',
         between: ' ',
-        after: '\n',
       },
     });
 
