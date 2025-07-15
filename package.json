@@ -2,9 +2,9 @@
   "name": "coolify-tweaks",
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "start": "vercel dev",
+    "build": "vercel build",
+    "deploy": "vercel deploy",
     "format": "pnpm ultracite format",
     "types:check": "tsc --noEmit --skipLibCheck"
   },
@@ -28,6 +28,6 @@
     "conventional-changelog-atom": "^5.0.0",
     "lefthook": "^1.11.15",
     "ultracite": "5.0.31",
-    "wrangler": "^4.24.3"
+    "vercel": "^44.4.1"
   }
 }
