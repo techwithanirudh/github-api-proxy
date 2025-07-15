@@ -4,34 +4,21 @@ import { cors } from 'hono/cors';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import ky from 'ky';
 import mime from 'mime';
-import { allowedOwners, headers as stripHeaders } from './config';
+import { processContent } from './lib/utils';
 
 export const config = { runtime: 'edge' };
 
 const app = new Hono().basePath('/api');
 app.use('*', cors());
 
-const isOwnerAllowed = (owner: string): boolean => {
-  return allowedOwners.includes(owner);
-};
 
-app.get('/release/:owner/:repo/:tag/:asset', async (c) => {
-  const owner = c.req.param('owner');
-  const repo = c.req.param('repo');
+app.get('/release/:tag', async (c) => {
+  const owner = 'techwithanirudh';
+  const repo = 'coolify-tweaks';
   const tag = c.req.param('tag');
-  const asset = c.req.param('asset');
+  const asset = 'main.user.css';
 
-  if (!isOwnerAllowed(owner)) {
-    return c.json(
-      {
-        error: `Access denied: Owner '${owner}' is not in the allowed owners list`,
-        allowedOwners
-      },
-      403
-    );
-  }
-
-  const url = `https://github.com/${owner}/${repo}/releases/${encodeURIComponent(tag)}/download/${encodeURIComponent(asset)}`;
+  const url = `https://github.com/${owner}/${repo}/releases/download/${encodeURIComponent(tag)}/${encodeURIComponent(asset)}`;
 
   try {
     const res = await ky.get(url, { throwHttpErrors: false, timeout: false });
@@ -40,28 +27,28 @@ app.get('/release/:owner/:repo/:tag/:asset', async (c) => {
       return c.json(
         {
           error: `GitHub returned ${res.status}: ${res.statusText}`,
-          url: `${owner}/${repo}/releases/tag/${tag}`,
-          requestedTag: tag,
-          resolvedTag: tag
+          url,
+          tag,
         },
         res.status as ContentfulStatusCode
       );
     }
 
-    const headersObj = new Headers(res.headers);
-    for (const bad of stripHeaders) {
-      for (const key of Array.from(headersObj.keys())) {
-        if (key.toLowerCase().startsWith(bad)) {
-          headersObj.delete(key);
-        }
-      }
-    }
-
+    const headers = new Headers(res.headers);
     const detected = mime.getType(asset);
-    headersObj.set('Content-Type', detected || 'application/octet-stream');
-    headersObj.set('X-Proxy-Host', 'github.com');
+    
+    const content = await res.text();
+    const result = await processContent({
+      content,
+      c
+    });  
 
-    return new Response(res.body, { status: res.status, headers: headersObj });
+    headers.delete('Content-Encoding');
+    headers.delete('Content-Disposition');
+    headers.set('Content-Type', detected || 'application/octet-stream');
+    headers.set('X-Proxy-Host', 'github.com');
+
+    return new Response(result, { status: res.status, headers });
   } catch (error) {
     return c.json(
       {
@@ -76,20 +63,18 @@ app.get('/release/:owner/:repo/:tag/:asset', async (c) => {
 app.get('/health', (c) => {
   return c.json({
     status: 'ok',
-    service: 'github-releases-server',
-    allowedOwners
+    service: 'coolify-tweaks' 
   });
 });
 
 app.get('/', (c) => {
   return c.json({
-    service: 'GitHub Releases Server',
-    description: 'Proxies GitHub release assets from configured allowed owners',
+    service: 'Coolify Tweaks',
+    description: 'Proxies GitHub release assets for Coolify Tweaks',
     endpoints: {
-      releases: '/api/release/:owner/:repo/:tag/:asset',
+      releases: '/api/release/:tag',
       health: '/api/health'
-    },
-    allowedOwners
+    }
   });
 });
 
