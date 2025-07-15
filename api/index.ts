@@ -1,12 +1,9 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
-import { handle } from 'hono/vercel';
 import ky from 'ky';
 import mime from 'mime';
 import { processContent } from './lib/utils';
-
-export const config = { runtime: 'nodejs' };
 
 const app = new Hono().basePath('/api');
 app.use('*', cors());
@@ -77,4 +74,4 @@ app.get('/', (c) => {
   });
 });
 
-export default handle(app);
+export default app;

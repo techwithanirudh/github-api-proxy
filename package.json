@@ -2,8 +2,7 @@
   "name": "coolify-tweaks",
   "type": "module",
   "scripts": {
-    "start": "vercel dev",
-    "deploy": "vercel deploy",
+    "dev": "bun run --hot src/index.ts",
     "format": "pnpm ultracite format",
     "types:check": "tsc --noEmit --skipLibCheck"
   },
@@ -26,7 +25,6 @@
     "@types/node": "^24.0.14",
     "conventional-changelog-atom": "^5.0.0",
     "lefthook": "^1.11.15",
-    "ultracite": "5.0.31",
-    "vercel": "^44.4.1"
+    "ultracite": "5.0.31"
   }
 }
