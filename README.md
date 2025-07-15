@@ -58,26 +58,32 @@ GET /api/
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
 # Start development server
-pnpm run start
+bun run dev
 
-# Deploy to Vercel
-pnpm run deploy
+# Deploy to Cloudflare
+bun run deploy
+```
+
+[For generating/synchronizing types based on your Worker configuration run](https://developers.cloudflare.com/workers/wrangler/commands/#types):
+
+```bash
+bun run cf-typegen
 ```
 
 ## Usage Examples
 
 ```bash
 # Download a specific release asset
-curl https://your-domain.vercel.app/api/release/techwithanirudh/my-app/v1.0.0/app.zip
+curl https://your-domain.cloudflare.dev/api/release/techwithanirudh/my-app/v1.0.0/app.zip
 
 # Download from the latest release
-curl https://your-domain.vercel.app/api/release/techwithanirudh/my-app/latest/app.zip
+curl https://your-domain.cloudflare.dev/api/release/techwithanirudh/my-app/latest/app.zip
 
 # Check allowed owners
-curl https://your-domain.vercel.app/api/health
+curl https://your-domain.cloudflare.dev/api/health
 ```
 
 ## Security

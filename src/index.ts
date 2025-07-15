@@ -1,16 +1,12 @@
 import { Hono } from 'hono';
-import { handle } from 'hono/vercel';
 import { cors } from 'hono/cors';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import ky from 'ky';
 import mime from 'mime';
 import { processContent } from './lib/utils';
 
-export const config = { runtime: 'edge' };
-
 const app = new Hono().basePath('/api');
 app.use('*', cors());
-
 
 app.get('/release/:tag', async (c) => {
   const owner = 'techwithanirudh';
@@ -36,12 +32,12 @@ app.get('/release/:tag', async (c) => {
 
     const headers = new Headers(res.headers);
     const detected = mime.getType(asset);
-    
+
     const content = await res.text();
     const result = await processContent({
       content,
-      c
-    });  
+      c,
+    });
 
     headers.delete('Content-Encoding');
     headers.delete('Content-Disposition');
@@ -53,7 +49,7 @@ app.get('/release/:tag', async (c) => {
     return c.json(
       {
         error: 'Failed to fetch release asset',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       500
     );
@@ -63,7 +59,7 @@ app.get('/release/:tag', async (c) => {
 app.get('/health', (c) => {
   return c.json({
     status: 'ok',
-    service: 'coolify-tweaks' 
+    service: 'coolify-tweaks',
   });
 });
 
@@ -73,9 +69,9 @@ app.get('/', (c) => {
     description: 'Proxies GitHub release assets for Coolify Tweaks',
     endpoints: {
       releases: '/api/release/:tag',
-      health: '/api/health'
-    }
+      health: '/api/health',
+    },
   });
 });
 
-export default handle(app);
+export default app;

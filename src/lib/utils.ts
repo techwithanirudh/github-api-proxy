@@ -1,8 +1,8 @@
-import ky from 'ky';
 import type { Context } from 'hono';
+import ky from 'ky';
 
 import { cssVarsToCss } from './css-transformer';
-import { registryItemSchema, type RegistryItem } from 'shadcn/registry';
+import { type RegistryItem, registryItemSchema } from './validators';
 
 export async function getThemeCss(themeId: string): Promise<string | null> {
   const url = `https://tweakcn.com/r/themes/${themeId}`;
@@ -33,7 +33,6 @@ export async function processContent({
   if (themeId) {
     const css = await getThemeCss(themeId);
 
-    
     return css;
   }
 
