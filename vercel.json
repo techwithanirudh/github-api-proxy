@@ -8,7 +8,7 @@
   "redirects": [
     {
       "source": "/api/release/techwithanirudh/coolify-tweaks/latest/(.*)",
-      "destination": "/api/release/latest/$1",
+      "destination": "/api/release/latest?asset=$1",
       "permanent": true
     },
     {
